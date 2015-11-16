@@ -170,7 +170,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			logger.error(" **** Error while receiving Groups for Device " );
-			logger.error( e.getMessage() );
+			String.format("Error while SQL execution: %s ", e);
 			//e.printStackTrace();
 		}
 		
@@ -300,8 +300,8 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			logger.error(" **** Error while receiving All Devices " );
-			logger.error( e.getMessage() );
-			e.printStackTrace();
+			String.format("Error while SQL execution: %s ", e);
+			//e.printStackTrace();
 		}
 		
 		logger.info(" **** Received " + nodes.length + " Devices ****");
