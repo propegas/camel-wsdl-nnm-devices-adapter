@@ -75,73 +75,106 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		throw new IllegalArgumentException("Incorrect operation: " + operationPath);
 	}
 	
-	private int processSearchDevices() throws Exception {
+	private int processSearchDevices() throws Exception, Error {
+		try {
+			int l = openids.length;
+			//Long timestamp;
+			
+			String host = endpoint.getConfiguration().getWsdlapiurl();
+			int port = endpoint.getConfiguration().getWsdlapiport();
+			String nnmUser = endpoint.getConfiguration().getWsusername();
+			String nnmPass = endpoint.getConfiguration().getWspassword();
+			
+			SampleClient sampleClient = new SampleClient() ;
+			sampleClient.setHost(host);
+			sampleClient.setPort(port);
+			sampleClient.setNnmPass(nnmPass);
+			sampleClient.setNnmUser(nnmUser);
+			
 		
-		 int l = openids.length;
-		//Long timestamp;
+			// get Old closed events
+			// Incident[] closed_events = getClosedEventsById(sampleClient);
+			
+			// get All new (Open) events
+			Node[] devices = {};
+			
+			devices = getAllDevices(sampleClient);
+			
 		
-		String host = endpoint.getConfiguration().getWsdlapiurl();
-		int port = endpoint.getConfiguration().getWsdlapiport();
-		String nnmUser = endpoint.getConfiguration().getWsusername();
-		String nnmPass = endpoint.getConfiguration().getWspassword();
-		
-		SampleClient sampleClient = new SampleClient() ;
-		sampleClient.setHost(host);
-		sampleClient.setPort(port);
-		sampleClient.setNnmPass(nnmPass);
-		sampleClient.setNnmUser(nnmUser);
-		
+			// Incident[] allevents = (Incident[]) ArrayUtils.addAll(devices,closed_events);
+			Device gendevice = new Device();
+			
+			NodeGroup[] groups = {};
+			String[] groupNames = {};
+			
+			for(int i=0; i < devices.length; i++){
+				
+				//logger.info("ID: " +  allevents[i].getId());
+				//allevents[i].getCreated().getTime()
+				//logger.info(String.format("TimeCreated: %d", allevents[i].getModified().getTime()));
+				
+				logger.debug(String.format("%d", devices[i].getModified().getTime() / 1000));
+				
+				groups = getGroupsByNode(sampleClient, devices[i].getId());
+				
+				groupNames = getNameFromGroups(groups);
+				
+				gendevice = genDeviceObj(devices[i], groupNames);
+				
+				//logger.debug(gendevice.toString());
+				//logger.debug(String.format("%d", devices[i].getModified().getTime() / 1000));
+				
+				//Cia[] cias = allevents[i].getCias();
+				
+				//cias[0].
+				
+				logger.debug(" **** Create Exchange container");
+		        Exchange exchange = getEndpoint().createExchange();
+		        exchange.getIn().setBody(gendevice, Event.class);
+		        exchange.getIn().setHeader("DeviceId", devices[i].getUuid() + 
+		        		"_" + devices[i].getId());
 	
-		// get Old closed events
-		// Incident[] closed_events = getClosedEventsById(sampleClient);
+		        getProcessor().process(exchange); 
+				
+			}
 		
-		// get All new (Open) events
-		Node[] devices = getAllDevices(sampleClient);
-	
-		// Incident[] allevents = (Incident[]) ArrayUtils.addAll(devices,closed_events);
-		Device gendevice = new Device();
-		
-		NodeGroup[] groups = {};
-		String[] groupNames = {};
-		
-		for(int i=0; i < devices.length; i++){
-			
-			//logger.info("ID: " +  allevents[i].getId());
-			//allevents[i].getCreated().getTime()
-			//logger.info(String.format("TimeCreated: %d", allevents[i].getModified().getTime()));
-			
-			logger.debug(String.format("%d", devices[i].getModified().getTime() / 1000));
-			
-			groups = getGroupsByNode(sampleClient, devices[i].getId());
-			
-			groupNames = getNameFromGroups(groups);
-			
-			gendevice = genDeviceObj(devices[i], groupNames);
-			
-			//logger.debug(gendevice.toString());
-			//logger.debug(String.format("%d", devices[i].getModified().getTime() / 1000));
-			
-			//Cia[] cias = allevents[i].getCias();
-			
-			//cias[0].
-			
-			logger.debug(" **** Create Exchange container");
-	        Exchange exchange = getEndpoint().createExchange();
-	        exchange.getIn().setBody(gendevice, Event.class);
-	        exchange.getIn().setHeader("DeviceId", devices[i].getUuid() + 
-	        		"_" + devices[i].getId());
-
-	        getProcessor().process(exchange); 
-			
+		} catch (Throwable e) { //send error message to the same queue
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			genErrorMessage(e.getMessage());
+			return 1;
 		}
-		
-		
-		
-		
-        
+      
         return 1;
 	}
 	
+	private void genErrorMessage(String message) {
+		// TODO Auto-generated method stub
+		long timestamp = System.currentTimeMillis();
+		timestamp = timestamp / 1000;
+		String textError = "Возникла ошибка при работе адаптера: ";
+		Event genevent = new Event();
+		genevent.setMessage(textError + message);
+		genevent.setEventCategory("ADAPTER");
+		genevent.setSeverity(PersistentEventSeverity.CRITICAL.name());
+		genevent.setTimestamp(timestamp);
+		genevent.setEventsource("NNM_DEVICE_ADAPTER");
+		
+		logger.debug(" **** Create Exchange for Error Message container");
+        Exchange exchange = getEndpoint().createExchange();
+        exchange.getIn().setBody(genevent, Event.class);
+        
+        exchange.getIn().setHeader("Timestamp", timestamp);
+
+        try {
+			getProcessor().process(exchange);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+	}
+
 	private String[] getNameFromGroups(NodeGroup[] groups) {
 		// TODO Auto-generated method stub
 		String[] groupNames = {};
@@ -171,6 +204,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 			// TODO Auto-generated catch block
 			logger.error(" **** Error while receiving Groups for Device " );
 			String.format("Error while SQL execution: %s ", e);
+			//throw 
 			//e.printStackTrace();
 		}
 		
@@ -256,7 +290,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		return allevents;
 	}
 
-	private Node[] getAllDevices(SampleClient sampleClient) {
+	private Node[] getAllDevices(SampleClient sampleClient) throws Exception {
 		// TODO Auto-generated method stub
 		
 		Condition cond1 = new Condition();
@@ -301,6 +335,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 			// TODO Auto-generated catch block
 			logger.error(" **** Error while receiving All Devices " );
 			String.format("Error while SQL execution: %s ", e);
+			throw new Error("Error while receiving All Devices. ");
 			//e.printStackTrace();
 		}
 		
