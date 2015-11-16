@@ -390,7 +390,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			logger.error(" **** Error while receiving All Devices " );
-			String.format("Error while SQL execution: %s ", e);
+			logger.error(String.format("Error while SQL execution: %s ", e));
 			throw new Error("Error while receiving All Devices. ");
 			//e.printStackTrace();
 		}
