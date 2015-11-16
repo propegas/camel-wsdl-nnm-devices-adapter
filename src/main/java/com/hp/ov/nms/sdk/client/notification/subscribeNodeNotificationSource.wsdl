@@ -1,0 +1,64 @@
+<wsdl:definitions targetNamespace='http://notification.sdk.nms.ov.hp.com/nms-sdk-node-notify' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://notification.sdk.nms.ov.hp.com/nms-sdk-node-notify' xmlns:wsa10='http://www.w3.org/2005/08/addressing' xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/' xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+ <wsdl:import location='ws-eventing.wsdl' namespace='http://schemas.xmlsoap.org/ws/2004/08/eventing'></wsdl:import>
+ <wsdl:types>
+  <xs:schema targetNamespace='http://schemas.xmlsoap.org/ws/2004/08/eventing'>
+   <xs:include schemaLocation='ws-eventing.xsd'/>
+  </xs:schema>
+  <xs:schema blockDefault='#all' elementFormDefault='unqualified' targetNamespace='http://notification.sdk.nms.ov.hp.com/nms-sdk-node-notify'>
+   <xs:complexType name='nodeNotification'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='event' type='tns:eventType'/>
+     <xs:element minOccurs='0' name='id' type='xs:string'/>
+     <xs:element minOccurs='0' name='uuid' type='xs:string'/>
+     <xs:element minOccurs='0' name='longName' type='xs:string'/>
+     <xs:element minOccurs='0' name='managementMode' type='tns:managementMode'/>
+     <xs:element name='isSnmpSupported' type='xs:boolean'/>
+     <xs:element name='discoveryAnalysisUpdated' type='xs:boolean'/>
+     <xs:element name='nodeResent' type='xs:int'/>
+     <xs:element minOccurs='0' name='updateTime' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='discoveryLastCompleted' type='xs:dateTime'/>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='customAttributes' nillable='true' type='tns:customAttribute'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='customAttribute'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='name' type='xs:string'/>
+     <xs:element minOccurs='0' name='value' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name='eventType'>
+    <xs:restriction base='xs:string'>
+     <xs:enumeration value='nodeDiscovered'/>
+     <xs:enumeration value='nodeRediscovered'/>
+     <xs:enumeration value='nodeUpdated'/>
+     <xs:enumeration value='nodeDeleted'/>
+    </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name='managementMode'>
+    <xs:restriction base='xs:string'>
+     <xs:enumeration value='INHERITED'/>
+     <xs:enumeration value='MANAGED'/>
+     <xs:enumeration value='NOTMANAGED'/>
+     <xs:enumeration value='OUTOFSERVICE'/>
+    </xs:restriction>
+   </xs:simpleType>
+  </xs:schema>
+ </wsdl:types>
+ <wsdl:message name='NodeNotificationMsg'>
+  <wsdl:part name='arg0' type='tns:nodeNotification'></wsdl:part>
+ </wsdl:message>
+ <wsdl:portType name='NodeNotificationSource' wse:EventSource='true'>
+  <wsdl:operation name='NodeNotification'>
+   <wsdl:output message='tns:NodeNotificationMsg'></wsdl:output>
+  </wsdl:operation>
+ </wsdl:portType>
+ <wsdl:binding name='NodeNotificationSourceBinding' type='tns:NodeNotificationSource'>
+  <soap:binding style='rpc' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <wsdl:operation name='NodeNotification'>
+   <soap:operation soapAction=''/>
+   <wsdl:output>
+    <soap:body use='literal'/>
+   </wsdl:output>
+  </wsdl:operation>
+ </wsdl:binding>
+</wsdl:definitions>
