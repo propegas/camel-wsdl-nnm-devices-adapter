@@ -50,6 +50,8 @@ public class Device implements  Serializable {
      
      private String hostName; 
      
+     private String source; 
+     
      private String name; 
      
      private String ipAddress; 
@@ -178,6 +180,14 @@ public class Device implements  Serializable {
 
 		public void setSystemName(String systemName) {
 			this.systemName = systemName;
+		}
+
+		public String getSource() {
+			return source;
+		}
+
+		public void setSource(String source) {
+			this.source = source;
 		}
    
      

@@ -5,6 +5,7 @@ import javax.jms.ConnectionFactory;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.builder.RouteBuilder;
+//import org.apache.camel.component.cache.CacheConstants;
 import org.apache.camel.component.jms.JmsComponent;
 import org.apache.camel.component.properties.PropertiesComponent;
 import org.apache.camel.model.dataformat.JsonDataFormat;
@@ -129,7 +130,11 @@ public class Main {
 		    		.marshal(myJson)
 		    	//.marshal(myJaxb)
 		    		//.log("${id} ${header.EventIdAndStatus}")
-		    		.to("activemq:NNM-tgc1-Devices.queue")
+		    		.choice()
+						.when(header("queueName").isEqualTo("Devices"))
+							.to("activemq:NNM-tgc1-Devices.queue")
+						.otherwise()
+							.to("activemq:NNM-tgc1-Events.queue")
 					.log("*** Device: ${id} ${header.DeviceId}");
 				}
 		});

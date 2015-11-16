@@ -60,8 +60,18 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 	public WsdlNNMConsumer(WsdlNNMEndpoint endpoint, Processor processor) {
         super(endpoint, processor);
         this.endpoint = endpoint;
-        //this.afterPoll();
+       //this.bef
         this.setDelay(endpoint.getConfiguration().getDelay());
+        //this.po
+        
+        /*
+        try {
+			this.afterPoll();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
 	}
 	
 	@Override
@@ -69,12 +79,56 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		
 		String operationPath = endpoint.getOperationPath();
 		
-		if (operationPath.equals("devices")) return processSearchDevices();
+		if (operationPath.equals("devices")) {
+			beforePoll(10000);
+			return processSearchDevices();
+		}
 		
 		// only one operation implemented for now !
 		throw new IllegalArgumentException("Incorrect operation: " + operationPath);
 	}
 	
+	@Override
+	public long beforePoll(long timeout) throws Exception {
+		
+		logger.info("*** Before Poll!!!");
+		// only one operation implemented for now !
+		//throw new IllegalArgumentException("Incorrect operation: ");
+		
+		//send HEARTBEAT
+		genHeartbeatMessage();
+		
+		return timeout;
+	}
+	
+	private void genHeartbeatMessage() {
+		// TODO Auto-generated method stub
+		long timestamp = System.currentTimeMillis();
+		timestamp = timestamp / 1000;
+		//String textError = "Возникла ошибка при работе адаптера: ";
+		Event genevent = new Event();
+		genevent.setMessage("Сигнал HEARTBEAT от адаптера");
+		genevent.setEventCategory("ADAPTER");
+		genevent.setObject("HEARTBEAT");
+		genevent.setSeverity(PersistentEventSeverity.OK.name());
+		genevent.setTimestamp(timestamp);
+		genevent.setEventsource("NNM_DEVICE_ADAPTER");
+		
+		logger.info(" **** Create Exchange for Heartbeat Message container");
+        Exchange exchange = getEndpoint().createExchange();
+        exchange.getIn().setBody(genevent, Event.class);
+        
+        exchange.getIn().setHeader("Timestamp", timestamp);
+        exchange.getIn().setHeader("queueName", "Events");
+
+        try {
+			getProcessor().process(exchange);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+	}
+
 	private int processSearchDevices() throws Exception, Error {
 		try {
 			int l = openids.length;
@@ -130,9 +184,10 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 				
 				logger.debug(" **** Create Exchange container");
 		        Exchange exchange = getEndpoint().createExchange();
-		        exchange.getIn().setBody(gendevice, Event.class);
+		        exchange.getIn().setBody(gendevice, Device.class);
 		        exchange.getIn().setHeader("DeviceId", devices[i].getUuid() + 
 		        		"_" + devices[i].getId());
+		        exchange.getIn().setHeader("queueName", "Devices");
 	
 		        getProcessor().process(exchange); 
 				
@@ -142,7 +197,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			genErrorMessage(e.getMessage());
-			return 1;
+			return 0;
 		}
       
         return 1;
@@ -160,11 +215,12 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		genevent.setTimestamp(timestamp);
 		genevent.setEventsource("NNM_DEVICE_ADAPTER");
 		
-		logger.debug(" **** Create Exchange for Error Message container");
+		logger.info(" **** Create Exchange for Error Message container");
         Exchange exchange = getEndpoint().createExchange();
         exchange.getIn().setBody(genevent, Event.class);
         
         exchange.getIn().setHeader("Timestamp", timestamp);
+        exchange.getIn().setHeader("queueName", "Events");
 
         try {
 			getProcessor().process(exchange);
@@ -438,6 +494,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		gendevice.setId(node.getUuid());
 		//gendevice.set(node.getUuid());
 		gendevice.setGroups(groupNames);
+		gendevice.setSource("NNM");
 		//gendevice.set
 		
 		//genevent.setParametr(event.getEventCategory());
