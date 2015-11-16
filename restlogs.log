@@ -3295,3 +3295,133 @@ Caused by: java.lang.ClassCastException: com.sun.xml.bind.v2.runtime.JAXBContext
 2015-11-16 11:28:46,501 | INFO | WsdlNNMConsumer.java 177 |  **** Received 6 Groups ****
 2015-11-16 11:28:46,609 | INFO | MarkerIgnoringBase.java 95 | *** Device: ID-ATC-2417-22575-1447662511541-0-111 1dcd0243-97c6-4d8a-8b9e-b75577608eae_6442484082
 2015-11-16 11:28:46,612 | INFO | WsdlNNMConsumer.java 165 |  **** Try to receive Groups for 6442484246 Device 
+2015-11-16 13:39:11,043 | INFO | Main.java 24 | Starting Custom Apache Camel component example
+2015-11-16 13:39:11,048 | INFO | Main.java 25 | Press CTRL+C to terminate the JVM
+2015-11-16 13:39:11,049 | INFO | Main.java 38 | activemq_ip: 172.20.19.195
+2015-11-16 13:39:11,049 | INFO | Main.java 39 | sdce_port: 61616
+2015-11-16 13:39:11,110 | INFO | MainSupport.java 329 | Apache Camel 2.15.3 starting
+2015-11-16 13:39:11,857 | INFO | DefaultTypeConverter.java 56 | Loaded 186 type converters
+2015-11-16 13:39:11,861 | INFO | DefaultCamelContext.java 2434 | Apache Camel 2.15.3 (CamelContext: camel-1) is starting
+2015-11-16 13:39:11,865 | INFO | ManagedManagementStrategy.java 187 | JMX is enabled
+2015-11-16 13:39:13,041 | INFO | DefaultCamelContext.java 2649 | AllowUseOriginalMessage is enabled. If access to the original message is not needed, then its recommended to turn this option off as it may improve performance.
+2015-11-16 13:39:13,042 | INFO | DefaultCamelContext.java 2659 | StreamCaching is not in use. If using streams then its recommended to enable stream caching. See more details at http://camel.apache.org/stream-caching.html
+2015-11-16 13:39:13,057 | INFO | JacksonDataFormat.java 384 | Registering module: com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule@2a719b7f
+2015-11-16 13:39:13,230 | INFO | DefaultCamelContext.java 3180 | Route: route1 started and consuming from: Endpoint[wsdlnnm://devices?delay=43200000&eventsdump=true&eventsuri=IncidentBeanService%2FIncidentBean&wsdlapiport=8082&wsdlapiurl=localhost&wspassword=xxxxxx&wsusername=webservice]
+2015-11-16 13:39:13,231 | INFO | DefaultCamelContext.java 2469 | Total 1 routes, of which 1 is started.
+2015-11-16 13:39:13,234 | INFO | DefaultCamelContext.java 2470 | Apache Camel 2.15.3 (CamelContext: camel-1) started in 1.371 seconds
+2015-11-16 13:39:15,301 | INFO | WsdlNNMConsumer.java 302 |  **** Try to receive All Devices 
+2015-11-16 13:39:15,301 | ERROR | WsdlNNMConsumer.java 309 |  **** Error while receiving All Devices 
+2015-11-16 13:39:15,308 | WARN | MarkerIgnoringBase.java 135 | Consumer Consumer[wsdlnnm://devices?delay=43200000&eventsdump=true&eventsuri=IncidentBeanService%2FIncidentBean&wsdlapiport=8082&wsdlapiurl=localhost&wspassword=xxxxxx&wsusername=webservice] failed polling endpoint: Endpoint[wsdlnnm://devices?delay=43200000&eventsdump=true&eventsuri=IncidentBeanService%2FIncidentBean&wsdlapiport=8082&wsdlapiurl=localhost&wspassword=xxxxxx&wsusername=webservice]. Will try again at next poll. Caused by: [java.lang.Error - Error while receiving All Devices. ]
+java.lang.Error: Error while receiving All Devices. 
+	at ru.atc.camel.nnm.devices.WsdlNNMConsumer.getAllDevices(WsdlNNMConsumer.java:311)
+	at ru.atc.camel.nnm.devices.WsdlNNMConsumer.processSearchDevices(WsdlNNMConsumer.java:101)
+	at ru.atc.camel.nnm.devices.WsdlNNMConsumer.poll(WsdlNNMConsumer.java:72)
+	at org.apache.camel.impl.ScheduledPollConsumer.doRun(ScheduledPollConsumer.java:174)
+	at org.apache.camel.impl.ScheduledPollConsumer.run(ScheduledPollConsumer.java:101)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)
+	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:304)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$301(ScheduledThreadPoolExecutor.java:178)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:745)
+2015-11-16 13:41:33,142 | INFO | Main.java 24 | Starting Custom Apache Camel component example
+2015-11-16 13:41:33,150 | INFO | Main.java 25 | Press CTRL+C to terminate the JVM
+2015-11-16 13:41:33,151 | INFO | Main.java 38 | activemq_ip: 172.20.19.195
+2015-11-16 13:41:33,151 | INFO | Main.java 39 | sdce_port: 61616
+2015-11-16 13:41:33,208 | INFO | MainSupport.java 329 | Apache Camel 2.15.3 starting
+2015-11-16 13:41:34,005 | INFO | DefaultTypeConverter.java 56 | Loaded 186 type converters
+2015-11-16 13:41:34,007 | INFO | DefaultCamelContext.java 2434 | Apache Camel 2.15.3 (CamelContext: camel-1) is starting
+2015-11-16 13:41:34,010 | INFO | ManagedManagementStrategy.java 187 | JMX is enabled
+2015-11-16 13:41:35,157 | INFO | DefaultCamelContext.java 2649 | AllowUseOriginalMessage is enabled. If access to the original message is not needed, then its recommended to turn this option off as it may improve performance.
+2015-11-16 13:41:35,157 | INFO | DefaultCamelContext.java 2659 | StreamCaching is not in use. If using streams then its recommended to enable stream caching. See more details at http://camel.apache.org/stream-caching.html
+2015-11-16 13:41:35,177 | INFO | JacksonDataFormat.java 384 | Registering module: com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule@1f9db378
+2015-11-16 13:41:35,364 | INFO | DefaultCamelContext.java 3180 | Route: route1 started and consuming from: Endpoint[wsdlnnm://devices?delay=43200000&eventsdump=true&eventsuri=IncidentBeanService%2FIncidentBean&wsdlapiport=8082&wsdlapiurl=localhost&wspassword=xxxxxx&wsusername=webservice]
+2015-11-16 13:41:35,364 | INFO | DefaultCamelContext.java 2469 | Total 1 routes, of which 1 is started.
+2015-11-16 13:41:35,367 | INFO | DefaultCamelContext.java 2470 | Apache Camel 2.15.3 (CamelContext: camel-1) started in 1.357 seconds
+2015-11-16 13:41:37,399 | INFO | WsdlNNMConsumer.java 302 |  **** Try to receive All Devices 
+2015-11-16 13:41:37,400 | ERROR | WsdlNNMConsumer.java 309 |  **** Error while receiving All Devices 
+2015-11-16 13:42:30,285 | INFO | Main.java 24 | Starting Custom Apache Camel component example
+2015-11-16 13:42:30,290 | INFO | Main.java 25 | Press CTRL+C to terminate the JVM
+2015-11-16 13:42:30,291 | INFO | Main.java 38 | activemq_ip: 172.20.19.195
+2015-11-16 13:42:30,291 | INFO | Main.java 39 | sdce_port: 61616
+2015-11-16 13:42:30,386 | INFO | MainSupport.java 329 | Apache Camel 2.15.3 starting
+2015-11-16 13:42:31,112 | INFO | DefaultTypeConverter.java 56 | Loaded 186 type converters
+2015-11-16 13:42:31,116 | INFO | DefaultCamelContext.java 2434 | Apache Camel 2.15.3 (CamelContext: camel-1) is starting
+2015-11-16 13:42:31,119 | INFO | ManagedManagementStrategy.java 187 | JMX is enabled
+2015-11-16 13:42:32,221 | INFO | DefaultCamelContext.java 2649 | AllowUseOriginalMessage is enabled. If access to the original message is not needed, then its recommended to turn this option off as it may improve performance.
+2015-11-16 13:42:32,221 | INFO | DefaultCamelContext.java 2659 | StreamCaching is not in use. If using streams then its recommended to enable stream caching. See more details at http://camel.apache.org/stream-caching.html
+2015-11-16 13:42:32,235 | INFO | JacksonDataFormat.java 384 | Registering module: com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule@5acfb476
+2015-11-16 13:42:32,410 | INFO | DefaultCamelContext.java 3180 | Route: route1 started and consuming from: Endpoint[wsdlnnm://devices?delay=43200000&eventsdump=true&eventsuri=IncidentBeanService%2FIncidentBean&wsdlapiport=8082&wsdlapiurl=localhost&wspassword=xxxxxx&wsusername=webservice]
+2015-11-16 13:42:32,410 | INFO | DefaultCamelContext.java 2469 | Total 1 routes, of which 1 is started.
+2015-11-16 13:42:32,413 | INFO | DefaultCamelContext.java 2470 | Apache Camel 2.15.3 (CamelContext: camel-1) started in 1.295 seconds
+2015-11-16 13:42:34,454 | INFO | WsdlNNMConsumer.java 302 |  **** Try to receive All Devices 
+2015-11-16 13:42:34,455 | ERROR | WsdlNNMConsumer.java 309 |  **** Error while receiving All Devices 
+2015-11-16 13:50:33,498 | INFO | Main.java 24 | Starting Custom Apache Camel component example
+2015-11-16 13:50:33,503 | INFO | Main.java 25 | Press CTRL+C to terminate the JVM
+2015-11-16 13:50:33,503 | INFO | Main.java 38 | activemq_ip: 172.20.19.195
+2015-11-16 13:50:33,503 | INFO | Main.java 39 | sdce_port: 61616
+2015-11-16 13:50:33,563 | INFO | MainSupport.java 329 | Apache Camel 2.15.3 starting
+2015-11-16 13:50:34,319 | INFO | DefaultTypeConverter.java 56 | Loaded 186 type converters
+2015-11-16 13:50:34,324 | INFO | DefaultCamelContext.java 2434 | Apache Camel 2.15.3 (CamelContext: camel-1) is starting
+2015-11-16 13:50:34,327 | INFO | ManagedManagementStrategy.java 187 | JMX is enabled
+2015-11-16 13:50:35,363 | INFO | DefaultCamelContext.java 2649 | AllowUseOriginalMessage is enabled. If access to the original message is not needed, then its recommended to turn this option off as it may improve performance.
+2015-11-16 13:50:35,364 | INFO | DefaultCamelContext.java 2659 | StreamCaching is not in use. If using streams then its recommended to enable stream caching. See more details at http://camel.apache.org/stream-caching.html
+2015-11-16 13:50:35,384 | INFO | JacksonDataFormat.java 384 | Registering module: com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule@23ed657a
+2015-11-16 13:50:35,559 | INFO | DefaultCamelContext.java 3180 | Route: route1 started and consuming from: Endpoint[wsdlnnm://devices?delay=43200000&eventsdump=true&eventsuri=IncidentBeanService%2FIncidentBean&wsdlapiport=8082&wsdlapiurl=localhost&wspassword=xxxxxx&wsusername=webservice]
+2015-11-16 13:50:35,560 | INFO | DefaultCamelContext.java 2469 | Total 1 routes, of which 1 is started.
+2015-11-16 13:50:35,564 | INFO | DefaultCamelContext.java 2470 | Apache Camel 2.15.3 (CamelContext: camel-1) started in 1.237 seconds
+2015-11-16 13:50:37,625 | INFO | WsdlNNMConsumer.java 325 |  **** Try to receive All Devices 
+2015-11-16 13:50:37,625 | ERROR | WsdlNNMConsumer.java 332 |  **** Error while receiving All Devices 
+2015-11-16 13:50:38,387 | INFO | MarkerIgnoringBase.java 95 | *** Device: ID-ATC-2417-29205-1447671033704-0-1 
+2015-11-16 14:01:58,026 | INFO | Main.java 24 | Starting Custom Apache Camel component example
+2015-11-16 14:01:58,032 | INFO | Main.java 25 | Press CTRL+C to terminate the JVM
+2015-11-16 14:01:58,032 | INFO | Main.java 38 | activemq_ip: 172.20.19.195
+2015-11-16 14:01:58,032 | INFO | Main.java 39 | sdce_port: 61616
+2015-11-16 14:01:58,085 | INFO | MainSupport.java 329 | Apache Camel 2.15.3 starting
+2015-11-16 14:01:58,798 | INFO | DefaultTypeConverter.java 56 | Loaded 186 type converters
+2015-11-16 14:01:58,801 | INFO | DefaultCamelContext.java 2434 | Apache Camel 2.15.3 (CamelContext: camel-1) is starting
+2015-11-16 14:01:58,804 | INFO | ManagedManagementStrategy.java 187 | JMX is enabled
+2015-11-16 14:01:59,894 | INFO | DefaultCamelContext.java 2649 | AllowUseOriginalMessage is enabled. If access to the original message is not needed, then its recommended to turn this option off as it may improve performance.
+2015-11-16 14:01:59,894 | INFO | DefaultCamelContext.java 2659 | StreamCaching is not in use. If using streams then its recommended to enable stream caching. See more details at http://camel.apache.org/stream-caching.html
+2015-11-16 14:01:59,909 | INFO | JacksonDataFormat.java 384 | Registering module: com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule@1f9db378
+2015-11-16 14:02:00,106 | INFO | DefaultCamelContext.java 3180 | Route: route1 started and consuming from: Endpoint[wsdlnnm://devices?delay=43200000&eventsdump=true&eventsuri=IncidentBeanService%2FIncidentBean&wsdlapiport=8082&wsdlapiurl=localhost&wspassword=xxxxxx&wsusername=webservice]
+2015-11-16 14:02:00,107 | INFO | DefaultCamelContext.java 2469 | Total 1 routes, of which 1 is started.
+2015-11-16 14:02:00,109 | INFO | DefaultCamelContext.java 2470 | Apache Camel 2.15.3 (CamelContext: camel-1) started in 1.306 seconds
+2015-11-16 14:02:02,153 | INFO | WsdlNNMConsumer.java 323 |  **** Try to receive All Devices 
+2015-11-16 14:02:02,153 | ERROR | WsdlNNMConsumer.java 330 |  **** Error while receiving All Devices 
+2015-11-16 14:02:02,868 | INFO | MarkerIgnoringBase.java 95 | *** Device: ID-ATC-2417-29336-1447671718209-0-1 
+2015-11-16 14:03:47,834 | INFO | Main.java 24 | Starting Custom Apache Camel component example
+2015-11-16 14:03:47,840 | INFO | Main.java 25 | Press CTRL+C to terminate the JVM
+2015-11-16 14:03:47,841 | INFO | Main.java 38 | activemq_ip: 172.20.19.195
+2015-11-16 14:03:47,841 | INFO | Main.java 39 | sdce_port: 61616
+2015-11-16 14:03:47,899 | INFO | MainSupport.java 329 | Apache Camel 2.15.3 starting
+2015-11-16 14:03:48,661 | INFO | DefaultTypeConverter.java 56 | Loaded 186 type converters
+2015-11-16 14:03:48,666 | INFO | DefaultCamelContext.java 2434 | Apache Camel 2.15.3 (CamelContext: camel-1) is starting
+2015-11-16 14:03:48,668 | INFO | ManagedManagementStrategy.java 187 | JMX is enabled
+2015-11-16 14:03:49,772 | INFO | DefaultCamelContext.java 2649 | AllowUseOriginalMessage is enabled. If access to the original message is not needed, then its recommended to turn this option off as it may improve performance.
+2015-11-16 14:03:49,773 | INFO | DefaultCamelContext.java 2659 | StreamCaching is not in use. If using streams then its recommended to enable stream caching. See more details at http://camel.apache.org/stream-caching.html
+2015-11-16 14:03:49,790 | INFO | JacksonDataFormat.java 384 | Registering module: com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule@23ed657a
+2015-11-16 14:03:49,940 | INFO | DefaultCamelContext.java 3180 | Route: route1 started and consuming from: Endpoint[wsdlnnm://devices?delay=43200000&eventsdump=true&eventsuri=IncidentBeanService%2FIncidentBean&wsdlapiport=8082&wsdlapiurl=localhost&wspassword=xxxxxx&wsusername=webservice]
+2015-11-16 14:03:49,941 | INFO | DefaultCamelContext.java 2469 | Total 1 routes, of which 1 is started.
+2015-11-16 14:03:49,946 | INFO | DefaultCamelContext.java 2470 | Apache Camel 2.15.3 (CamelContext: camel-1) started in 1.276 seconds
+2015-11-16 14:03:51,987 | INFO | WsdlNNMConsumer.java 323 |  **** Try to receive All Devices 
+2015-11-16 14:03:51,987 | ERROR | WsdlNNMConsumer.java 330 |  **** Error while receiving All Devices 
+2015-11-16 14:03:52,703 | INFO | MarkerIgnoringBase.java 95 | *** Device: ID-ATC-2417-29368-1447671828020-0-1 
+2015-11-16 14:07:54,686 | INFO | Main.java 24 | Starting Custom Apache Camel component example
+2015-11-16 14:07:54,692 | INFO | Main.java 25 | Press CTRL+C to terminate the JVM
+2015-11-16 14:07:54,692 | INFO | Main.java 38 | activemq_ip: 172.20.19.195
+2015-11-16 14:07:54,692 | INFO | Main.java 39 | sdce_port: 61616
+2015-11-16 14:07:54,749 | INFO | MainSupport.java 329 | Apache Camel 2.15.3 starting
+2015-11-16 14:07:55,658 | INFO | DefaultTypeConverter.java 56 | Loaded 186 type converters
+2015-11-16 14:07:55,662 | INFO | DefaultCamelContext.java 2434 | Apache Camel 2.15.3 (CamelContext: camel-1) is starting
+2015-11-16 14:07:55,664 | INFO | ManagedManagementStrategy.java 187 | JMX is enabled
+2015-11-16 14:07:56,713 | INFO | DefaultCamelContext.java 2649 | AllowUseOriginalMessage is enabled. If access to the original message is not needed, then its recommended to turn this option off as it may improve performance.
+2015-11-16 14:07:56,714 | INFO | DefaultCamelContext.java 2659 | StreamCaching is not in use. If using streams then its recommended to enable stream caching. See more details at http://camel.apache.org/stream-caching.html
+2015-11-16 14:07:56,729 | INFO | JacksonDataFormat.java 384 | Registering module: com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule@59c49670
+2015-11-16 14:07:56,888 | INFO | DefaultCamelContext.java 3180 | Route: route1 started and consuming from: Endpoint[wsdlnnm://devices?delay=43200000&eventsdump=true&eventsuri=IncidentBeanService%2FIncidentBean&wsdlapiport=8082&wsdlapiurl=localhost&wspassword=xxxxxx&wsusername=webservice]
+2015-11-16 14:07:56,889 | INFO | DefaultCamelContext.java 2469 | Total 1 routes, of which 1 is started.
+2015-11-16 14:07:56,891 | INFO | DefaultCamelContext.java 2470 | Apache Camel 2.15.3 (CamelContext: camel-1) started in 1.227 seconds
+2015-11-16 14:07:58,937 | INFO | WsdlNNMConsumer.java 329 |  **** Try to receive All Devices 
+2015-11-16 14:07:58,937 | ERROR | WsdlNNMConsumer.java 336 |  **** Error while receiving All Devices 
+2015-11-16 14:07:59,687 | INFO | MarkerIgnoringBase.java 95 | *** Device: ID-ATC-2417-29433-1447672074887-0-1 
