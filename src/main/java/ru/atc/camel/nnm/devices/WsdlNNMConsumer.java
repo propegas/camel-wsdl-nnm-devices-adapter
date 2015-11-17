@@ -62,7 +62,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
         super(endpoint, processor);
         this.endpoint = endpoint;
        //this.bef
-        this.setTimeUnit(TimeUnit.HOURS);
+        this.setTimeUnit(TimeUnit.MINUTES);
         this.setDelay(endpoint.getConfiguration().getDelay());
         //this.po
         
