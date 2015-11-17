@@ -138,7 +138,7 @@ public class Main {
 		    		//.log("${id} ${header.EventIdAndStatus}")
 		    		.choice()
 						.when(header("queueName").isEqualTo("Devices"))
-							.to("activemq:{{devicesqueue}}e")
+							.to("activemq:{{devicesqueue}}")
 						.otherwise()
 							.to("activemq:{{eventsqueue}}")
 					.log("*** Device: ${id} ${header.DeviceId}");
