@@ -4,7 +4,11 @@ import java.io.File;
 import javax.jms.ConnectionFactory;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.camel.Exchange;
+import org.apache.camel.Message;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+//import org.apache.camel.component.cache.CacheConstants;
 //import org.apache.camel.component.cache.CacheConstants;
 import org.apache.camel.component.jms.JmsComponent;
 import org.apache.camel.component.properties.PropertiesComponent;
@@ -78,6 +82,8 @@ public class Main {
 		        File cachefile = new File("sendedEvents.dat");
 		        cachefile.createNewFile();
 		        
+		        
+		        
 				from("wsdlnnm://devices?"
 		    			+ "delay={{delay}}&"
 		    			+ "wsdlapiurl={{wsdlapiurl}}&"
@@ -136,6 +142,20 @@ public class Main {
 						.otherwise()
 							.to("activemq:NNM-tgc1-Events.queue")
 					.log("*** Device: ${id} ${header.DeviceId}");
+				
+				
+				// Heartbeats
+				from("timer://foo?period={{heartbeatsdelay}}")
+		        .process(new Processor() {
+					public void process(Exchange exchange) throws Exception {
+						WsdlNNMConsumer.genHeartbeatMessage(exchange);
+					}
+				})
+				//.bean(WsdlNNMConsumer.class, "genHeartbeatMessage", exchange)
+		        .marshal(myJson)
+		        .to("activemq:NNM-tgc1-Events.queue")
+				.log("*** Heartbeat: ${id}");
+				
 				}
 		});
 		
