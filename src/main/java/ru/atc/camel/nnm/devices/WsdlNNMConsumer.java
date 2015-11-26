@@ -365,7 +365,11 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		cons.setName("includeCias");
 		cons.setValue("true");
 		
-		Filter[] subFilters=new Filter[]{ cons };
+		Constraint cons1 = new Constraint();
+		cons1.setName("includeCustomAttributes");
+		cons1.setValue("true");
+		
+		Filter[] subFilters=new Filter[]{ cons, cons1 };
 		Expression existFilter = new Expression();
 		existFilter.setOperator(BooleanOperator.AND);
 		existFilter.setSubFilters(subFilters);
@@ -498,6 +502,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		gendevice.setModelName(node.getDeviceModel());
 		gendevice.setDeviceState(setRightStatus(node.getStatus().name()));
 		gendevice.setId(node.getUuid());
+		//gendevice.setParentID(node.getCustomAttributes()[0].getValue());
 		//gendevice.set(node.getUuid());
 		gendevice.setGroups(groupNames);
 		gendevice.setSource("NNM");
