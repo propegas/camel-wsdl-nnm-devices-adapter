@@ -222,6 +222,8 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		genevent.setSeverity(PersistentEventSeverity.CRITICAL.name());
 		genevent.setTimestamp(timestamp);
 		genevent.setEventsource("NNM_DEVICE_ADAPTER");
+		genevent.setStatus("OPEN");
+		genevent.setHost("adapter");
 		
 		logger.info(" **** Create Exchange for Error Message container");
         Exchange exchange = getEndpoint().createExchange();
