@@ -124,7 +124,9 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
         exchange.getIn().setBody(genevent, Event.class);
         
         exchange.getIn().setHeader("Timestamp", timestamp);
-        exchange.getIn().setHeader("queueName", "Events");
+        exchange.getIn().setHeader("queueName", "Heartbeats");
+        exchange.getIn().setHeader("Type", "Heartbeats");
+        exchange.getIn().setHeader("Source", "NNM_DEVICE_ADAPTER");
 
         try {
         	//Processor processor = getProcessor();
