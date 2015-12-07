@@ -29,6 +29,7 @@ import com.hp.ov.nms.sdk.incident.Cia;
 //import com.hp.ov.nms.sdk.incident.GetIncidents;
 import com.hp.ov.nms.sdk.incident.Incident;
 import com.hp.ov.nms.sdk.incident.NmsIncident;
+import com.hp.ov.nms.sdk.inventory.CustomAttribute;
 import com.hp.ov.nms.sdk.node.NmsNode;
 import com.hp.ov.nms.sdk.node.Node;
 import com.hp.ov.nms.sdk.nodegroup.NmsNodeGroup;
@@ -202,6 +203,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		} catch (Throwable e) { //send error message to the same queue
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error( String.format("Error while get Nodes from NNM: %s ", e));
 			genErrorMessage(e.getMessage());
 			return 0;
 		}
@@ -227,6 +229,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
         
         exchange.getIn().setHeader("Timestamp", timestamp);
         exchange.getIn().setHeader("queueName", "Events");
+        exchange.getIn().setHeader("Type", "Error");
 
         try {
 			getProcessor().process(exchange);
@@ -248,7 +251,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		return groupNames;
 	}
 
-	private NodeGroup[] getGroupsByNode(SampleClient sampleClient, String id) {
+	private NodeGroup[] getGroupsByNode(SampleClient sampleClient, String id) throws Exception {
 		// TODO Auto-generated method stub
 		
 		NmsNodeGroup nmsgroup;
@@ -266,7 +269,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 			// TODO Auto-generated catch block
 			logger.error(" **** Error while receiving Groups for Device " );
 			String.format("Error while SQL execution: %s ", e);
-			//throw 
+			throw new Exception("Failed while getGroupsByNode.");
 			//e.printStackTrace();
 		}
 		
@@ -400,8 +403,8 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			logger.error(" **** Error while receiving All Devices " );
-			logger.error(String.format("Error while SQL execution: %s ", e));
-			throw new Error("Error while receiving All Devices. ");
+			logger.error(String.format("Error while get All Nodes execution: %s ", e));
+			throw new Error(String.format("Error while receiving All Devices: %s ", e));
 			//e.printStackTrace();
 		}
 		
@@ -502,32 +505,24 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		gendevice.setModelName(node.getDeviceModel());
 		gendevice.setDeviceState(setRightStatus(node.getStatus().name()));
 		gendevice.setId(node.getUuid());
-		//gendevice.setParentID(node.getCustomAttributes()[0].getValue());
+		//gendevice.setParentID(node.getCustomAttributes()[0].G.getValue());
+		
+		CustomAttribute[] customAttributes = {};
+		customAttributes = node.getCustomAttributes();
+		if (customAttributes != null) {
+			for (int i = 0; i < customAttributes.length; i++) {
+				if (customAttributes[i].getName() == "parentID") {
+					gendevice.setParentID(customAttributes[i].getValue());
+					break;
+				}
+			} 
+		}
 		//gendevice.set(node.getUuid());
 		gendevice.setGroups(groupNames);
 		gendevice.setSource("NNM");
 		//gendevice.set
 		
-		//genevent.setParametr(event.getEventCategory());
-		/*
-		gendevice.setObject(node.getSourceName());
-		
-		gendevice.setCategory("HARDWARE");
-		gendevice.setExternalid(node.getUuid());
-		gendevice.setMessage(node.getFormattedMessage());
-		gendevice.setSeverity(setRightSeverity(node.getSeverity().name()));
-		//PersistentEventSeverity.CRITICAL.toString();
-		gendevice.setStatus(setRightStatus(node.getLifecycleState()));
-		gendevice.setOrigin(node.getOrigin().name());
-		gendevice.setParametr(node.getName());
-		gendevice.setEventCategory(node.getCategory());
-		
-		gendevice.setTimestamp(node.getCreated().getTime() / 1000 );
-		gendevice.setEventsource("NNM");
-		gendevice.setService("NNM");
-		gendevice.setCi(node.getSourceNodeUuid());
-		//System.out.println(event.toString());
-		*/
+	
 		//logger.info(genevent.toString());
 		
 		return gendevice;

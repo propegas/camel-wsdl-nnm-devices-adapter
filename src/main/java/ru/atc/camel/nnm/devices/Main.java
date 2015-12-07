@@ -41,7 +41,7 @@ public class Main {
 			activemq_ip = "172.20.19.195";
 		
 		logger.info("activemq_ip: " + activemq_ip);
-		logger.info("sdce_port: " + activemq_port);
+		logger.info("activemq_port: " + activemq_port);
 		
 		org.apache.camel.main.Main main = new org.apache.camel.main.Main();
 		main.enableHangupSupport();
@@ -93,55 +93,18 @@ public class Main {
 		    			+ "eventsdump={{eventsdump}}&"
 		    			+ "eventsuri={{eventsuri}}")
 		    	
-		    	//.split(body().convertTo(Event.class));
-				//.split(body()).convertBodyTo(Event.class);
-				//.convertBodyTo(Event.class);
-				//String "getKey";
-				//ExpressionNode id = test.bean(Event.class, "getExternalid");
-				
-				/*
-				from("restna://events?"
-		    			+ "delay={{delay}}&"
-		    			+ "restapiurl={{restapiurl}}&"
-		    			+ "wsusername={{wsusername}}&"
-		    			+ "wspassword={{wspassword}}&"
-		    			+ "eventsuri={{eventsuri}}&"
-		    			+ "startindex={{startindex}}&"
-		    			+ "count={{count}}&"
-		    			+ "specialEvent={{specialEvent}}")
 		    	
-		    	//.split(body().convertTo(Event.class))
-				.split(body())
-				*/
-				/*
-				.idempotentConsumer(
-			             header("DeviceId"),
-			             FileIdempotentRepository.fileIdempotentRepository(cachefile, 2000, 51200000)
-			             )
-				*/
-				//.memoryIdempotentRepository(200)
-				//ValueBuilder vvv = new ValueBuilder(simple("${body.externalid}"));
-				//logger.info("vvv " + vvv.toString());
-				//System.out.println("vvv " + vvv.toString());
-
-				//test.getExpression("${body.externalid}");
-				//test.transform().simple("OrderId: ${bean:orderIdGenerator?method=generateId}");
-				//${body.getExternalid}${body.externalid}
-				
-		    	//	.log(body().toString())
-		    	//.log("*-*-*-*-*-*-*-*-* Processing ${id}")
-		    	//.log("${id} ${body.getKey} ${body.key} ")
-		    	//myJson.
-		    	//.marshal().json(JsonLibrary.Jackson,Event.class)
 		    		.marshal(myJson)
+		    		.choice()
+					.when(header("Type").isEqualTo("Error"))
+						//.marshal(myJson)
+						.to("activemq:{{eventsqueue}}")
+						.log("Error: ${id} ${header.EventUniqId}")
 		    	//.marshal(myJaxb)
 		    		//.log("${id} ${header.EventIdAndStatus}")
-		    		.choice()
-						.when(header("queueName").isEqualTo("Devices"))
-							.to("activemq:{{devicesqueue}}")
-						.otherwise()
-							.to("activemq:{{eventsqueue}}")
-					.log("*** Device: ${id} ${header.DeviceId}");
+					.otherwise()
+						.to("activemq:{{devicesqueue}}")
+						.log("*** Device: ${id} ${header.DeviceId}");
 				
 				
 				// Heartbeats
@@ -153,7 +116,7 @@ public class Main {
 				})
 				//.bean(WsdlNNMConsumer.class, "genHeartbeatMessage", exchange)
 		        .marshal(myJson)
-		        .to("activemq:NNM-tgc1-Events.queue")
+		        .to("activemq:{{heartbeatsqueue}}")
 				.log("*** Heartbeat: ${id}");
 				
 				}
