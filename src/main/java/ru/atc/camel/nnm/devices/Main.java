@@ -17,6 +17,8 @@ import org.apache.camel.model.dataformat.JsonLibrary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.camel.processor.idempotent.FileIdempotentRepository;
+
+import ru.at_consulting.itsm.device.Device;
 import ru.at_consulting.itsm.event.Event;
 
 public class Main {
@@ -64,7 +66,7 @@ public class Main {
 				JsonDataFormat myJson = new JsonDataFormat();
 				myJson.setPrettyPrint(true);
 				myJson.setLibrary(JsonLibrary.Jackson);
-				myJson.setJsonView(Event.class);
+				myJson.setJsonView(Device.class);
 				//myJson.setPrettyPrint(true);
 				
 				PropertiesComponent properties = new PropertiesComponent();
@@ -91,6 +93,8 @@ public class Main {
 		    			+ "wsusername={{wsusername}}&"
 		    			+ "wspassword={{wspassword}}&"
 		    			+ "eventsdump={{eventsdump}}&"
+		    			+ "source={{source}}&"
+		    			+ "adaptername={{adaptername}}&"
 		    			+ "eventsuri={{eventsuri}}")
 		    	
 		    	

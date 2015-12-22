@@ -45,7 +45,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 	
 	private static Logger logger = LoggerFactory.getLogger(Main.class);
 	
-	private WsdlNNMEndpoint endpoint;
+	private static WsdlNNMEndpoint endpoint;
 	
 	public enum PersistentEventSeverity {
 	    OK, INFO, WARNING, MINOR, MAJOR, CRITICAL;
@@ -61,7 +61,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 
 	public WsdlNNMConsumer(WsdlNNMEndpoint endpoint, Processor processor) {
         super(endpoint, processor);
-        this.endpoint = endpoint;
+        WsdlNNMConsumer.endpoint = endpoint;
        //this.bef
         this.setTimeUnit(TimeUnit.MINUTES);
         this.setInitialDelay(0);
@@ -117,7 +117,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		genevent.setObject("HEARTBEAT");
 		genevent.setSeverity(PersistentEventSeverity.OK.name());
 		genevent.setTimestamp(timestamp);
-		genevent.setEventsource("NNM_DEVICE_ADAPTER");
+		genevent.setEventsource(String.format("%s", endpoint.getConfiguration().getAdaptername()));
 		
 		logger.info(" **** Create Exchange for Heartbeat Message container");
         //Exchange exchange = getEndpoint().createExchange();
@@ -176,13 +176,18 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 				//allevents[i].getCreated().getTime()
 				//logger.info(String.format("TimeCreated: %d", allevents[i].getModified().getTime()));
 				
-				logger.debug(String.format("%d", devices[i].getModified().getTime() / 1000));
+				logger.debug(String.format("Time: %d", devices[i].getModified().getTime() / 1000));
+				
+				logger.debug(String.format("Node: %s", devices[i].getName()));
 				
 				groups = getGroupsByNode(sampleClient, devices[i].getId());
 				
 				groupNames = getNameFromGroups(groups);
 				
-				gendevice = genDeviceObj(devices[i], groupNames);
+				String parentGroupUuid = null;				
+				parentGroupUuid = getParentGroup(groups);
+				
+				gendevice = genDeviceObj(devices[i], parentGroupUuid);
 				
 				//logger.debug(gendevice.toString());
 				//logger.debug(String.format("%d", devices[i].getModified().getTime() / 1000));
@@ -213,6 +218,28 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
         return 1;
 	}
 	
+	private String getParentGroup(NodeGroup[] groups) {
+		// TODO Auto-generated method stub
+		
+		String parentUuid = null;
+		for(int i=0; i < groups.length; i++){
+			
+			if (groups[i].getName().startsWith("[")) {
+				parentUuid = groups[i].getUuid();
+				logger.debug(" *** Found Parent Group name: " + groups[i].getName() );
+				logger.debug(" *** Found Parent Group ID: " + groups[i].getId() );
+				logger.debug(" *** Found Parent Group UUID: " + groups[i].getUuid() );
+			}
+			else {
+				continue;
+			}
+			//groupNames = (String[]) ArrayUtils.add(groupNames,groups[i].getName());
+		}
+		return parentUuid;
+		
+		//return null;
+	}
+
 	private void genErrorMessage(String message) {
 		// TODO Auto-generated method stub
 		long timestamp = System.currentTimeMillis();
@@ -223,7 +250,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		genevent.setEventCategory("ADAPTER");
 		genevent.setSeverity(PersistentEventSeverity.CRITICAL.name());
 		genevent.setTimestamp(timestamp);
-		genevent.setEventsource("NNM_DEVICE_ADAPTER");
+		genevent.setEventsource(String.format("%s", endpoint.getConfiguration().getAdaptername()));
 		genevent.setStatus("OPEN");
 		genevent.setHost("adapter");
 		
@@ -250,6 +277,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		for(int i=0; i < groups.length; i++){
 			logger.debug(" *** Group name: " + groups[i].getName() );
 			logger.debug(" *** Group ID: " + groups[i].getId() );
+			logger.debug(" *** Group UUID: " + groups[i].getUuid() );
 			groupNames = (String[]) ArrayUtils.add(groupNames,groups[i].getName());
 		}
 		return groupNames;
@@ -497,7 +525,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		return text;
 	}
 
-	private Device genDeviceObj( Node node, String[] groupNames ) {
+	private Device genDeviceObj( Node node, String parentGroupUuid ) {
 		Device gendevice = new Device();
 		
 		String hostName = "";
@@ -522,8 +550,16 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 			} 
 		}
 		//gendevice.set(node.getUuid());
-		gendevice.setGroups(groupNames);
-		gendevice.setSource("NNM");
+		
+		// !!! TEMPORARY DISABLED !!!
+		//gendevice.setGroups(groupNames);
+		
+		if (gendevice.getParentID() !=null && parentGroupUuid != null) {
+			gendevice.setParentID(parentGroupUuid);
+		}
+		
+		String source = endpoint.getConfiguration().getSource();
+		gendevice.setSource(source);
 		//gendevice.set
 		
 	
