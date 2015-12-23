@@ -608,11 +608,22 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		gendevice.setId(node.getUuid());
 		// gendevice.setParentID(node.getCustomAttributes()[0].G.getValue());
 
-		CustomAttribute[] customAttributes = {};
-		customAttributes = node.getCustomAttributes();
+		//CustomAttribute[] customAttributes = {};
+		
+		boolean parentIDbyCustAttr = false;
+		CustomAttribute[] customAttributes = node.getCustomAttributes();
 		if (customAttributes != null) {
+			logger.debug(String.format("*** CustomAttributes length node %s: %s ", 
+					hostName, customAttributes.length));
 			for (int i = 0; i < customAttributes.length; i++) {
-				if (customAttributes[i].getName() == "parentID") {
+				logger.debug(String.format("*** CustomAttributes %s: %s ", 
+						hostName, customAttributes[i].toString()));
+				logger.debug(String.format("*** CustomAttributes name %s: %s ", 
+						hostName, customAttributes[i].getName()));
+				if (customAttributes[i].getName().equals("parentID")) {
+					logger.debug(String.format("*** Found parentID in CustomAttributes for node %s: %s ", 
+							hostName, customAttributes[i].getValue()));
+					parentIDbyCustAttr = true;
 					gendevice.setParentID(customAttributes[i].getValue());
 					break;
 				}
@@ -623,7 +634,9 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		// !!! TEMPORARY DISABLED !!!
 		// gendevice.setGroups(groupNames);
 
-		if (gendevice.getParentID() == null && parentGroupUuid != null) {
+		if (!parentIDbyCustAttr && parentGroupUuid != null) {
+			logger.debug(String.format("*** Found parentID in groups for node %s: %s ", 
+					hostName, parentGroupUuid));
 			gendevice.setParentID(parentGroupUuid);
 		}
 
