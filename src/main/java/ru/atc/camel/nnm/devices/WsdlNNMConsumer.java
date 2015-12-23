@@ -1,7 +1,7 @@
 package ru.atc.camel.nnm.devices;
 
 import java.io.BufferedWriter;
-import java.io.File;
+//import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Date;
@@ -189,7 +189,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 				gendevice = genDeviceObj(devices[i], parentGroupUuid);
 
 				logger.debug(" **** Create Exchange container For Devices");
-				key = devices[i].getUuid() + "_" + devices[i].getId();
+				key = "node" + "_" + devices[i].getUuid() + "_" + devices[i].getId();
 				//devicetype = "node";
 				try {
 					createExchangeDevice(gendevice, key, "node");
@@ -216,7 +216,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 				gendevice = genDeviceObj(allgroups[i]);
 
 				logger.debug(" **** Create Exchange container For NodeGroups");
-				key = allgroups[i].getUuid() + "_" + allgroups[i].getId();
+				key = "group" + "_" + allgroups[i].getUuid() + "_" + allgroups[i].getId();
 				//devicetype = "group";
 				try {
 					createExchangeDevice(gendevice, key, "group");
@@ -262,21 +262,21 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 
 		NodeGroup[] groups = {};
 		try {
-			logger.info(" **** Try to receive All Devices ");
+			logger.info(" **** Try to receive All Groups ");
 			// timestamp = System.currentTimeMillis();
 			groups = nmsgroup.getNodeGroups(existFilter);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			logger.error(" **** Error while receiving All Devices ");
-			logger.error(String.format("Error while get All Nodes execution: %s ", e));
-			throw new Error(String.format("Error while receiving All Devices: %s ", e));
+			logger.error(" **** Error while receiving All Groups ");
+			logger.error(String.format("Error while get All Groups execution: %s ", e));
+			throw new Error(String.format("Error while receiving All Groups: %s ", e));
 			// e.printStackTrace();
 		}
 
-		logger.info(" **** Received " + groups.length + " Devices ****");
+		logger.info(" **** Received " + groups.length + " Groups ****");
 
-		logger.debug(" **** Saving Received opend events's IDs ****");
+		//logger.debug(" **** Saving Received opend events's IDs ****");
 
 		/*
 		 * openids = new String[]{ }; for(int i=0; i < nodes.length; i++){
@@ -375,7 +375,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 		NodeGroup[] groups = {};
 
 		try {
-			logger.info(" **** Try to receive Groups for " + id + " Device ");
+			logger.debug(" **** Try to receive Groups for " + id + " Device ");
 			// timestamp = System.currentTimeMillis();
 			groups = nmsgroup.getNodeGroupsByNode(id);
 
@@ -387,7 +387,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 			// e.printStackTrace();
 		}
 
-		logger.info(" **** Received " + groups.length + " Groups ****");
+		logger.debug(" **** Received " + groups.length + " Groups ****");
 
 		return groups;
 	}
