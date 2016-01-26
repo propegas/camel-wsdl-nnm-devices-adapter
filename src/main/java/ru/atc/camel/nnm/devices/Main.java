@@ -94,6 +94,7 @@ public class Main {
 		    			+ "wspassword={{wspassword}}&"
 		    			+ "eventsdump={{eventsdump}}&"
 		    			+ "source={{source}}&"
+		    			+ "nodeGroupPattern={{node_group_pattern}}&"
 		    			+ "adaptername={{adaptername}}")
 		    	
 		    	

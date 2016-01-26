@@ -52,6 +52,8 @@ public class Device implements  Serializable {
      
      private String source; 
      
+     private String service; 
+     
      private String name; 
      
      private String ipAddress; 
@@ -188,6 +190,14 @@ public class Device implements  Serializable {
 
 		public void setSource(String source) {
 			this.source = source;
+		}
+
+		public String getService() {
+			return service;
+		}
+
+		public void setService(String service) {
+			this.service = service;
 		}
    
      

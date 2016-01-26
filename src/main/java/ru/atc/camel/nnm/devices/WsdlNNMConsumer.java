@@ -187,17 +187,20 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 				parentGroupUuid = getParentGroup(groupsbynode);
 
 				gendevice = genDeviceObj(devices[i], parentGroupUuid);
+				
+				if (gendevice != null) {
 
-				logger.debug(" **** Create Exchange container For Devices");
-				key = "node" + "_" + devices[i].getUuid() + "_" + devices[i].getId();
-				//devicetype = "node";
-				try {
-					createExchangeDevice(gendevice, key, "node");
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					logger.error(String.format("Error while send Exchange message: %s ", e));
-					genErrorMessage(e.getMessage());
+					logger.debug(" **** Create Exchange container For Devices");
+					key = "node" + "_" + devices[i].getUuid() + "_" + devices[i].getId();
+					//devicetype = "node";
+					try {
+						createExchangeDevice(gendevice, key, "node");
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						logger.error(String.format("Error while send Exchange message: %s ", e));
+						genErrorMessage(e.getMessage());
+					}
 				}
 
 			}
@@ -243,18 +246,24 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 	}
 
 	private NodeGroup[] getAllGroups(SampleClient sampleClient) {
-		// TODO Auto-generated method stub
-		Condition cond1 = new Condition();
+
+		//Condition cond1 = new Condition();
 
 		Constraint cons1 = new Constraint();
 		cons1.setName("maxObjects");
 		cons1.setValue("1000");
+		
+		Condition cond1 = new Condition();
+		cond1.setName("name");
+		cond1.setValue("%(%)%");
+		//cond1.setValue("Closed");
+		cond1.setOperator(Operator.LIKE);
 
-		Filter[] subFilters = new Filter[] { cons1 };
+		Filter[] subFilters = new Filter[] { cons1, cond1 };
 		Expression existFilter = new Expression();
 		existFilter.setOperator(BooleanOperator.AND);
 		existFilter.setSubFilters(subFilters);
-
+		
 		NmsNodeGroup nmsgroup = sampleClient.getNodeGroupService();
 
 		String eventsdump = endpoint.getConfiguration().getEventsdump();
@@ -292,11 +301,26 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 
 	private String getParentGroup(NodeGroup[] groups) {
 		// TODO Auto-generated method stub
+		
+		String pattern = endpoint.getConfiguration().getNodeGroupPattern();
+		logger.debug("*** NNM Node Group Pattern: " + pattern);
+		
+		//String newHostgroupName = ""; 
+		//String service = "";
+		
+		// Example item as CI : 
+		// (Невский.СЭ)ТЭЦ-1
+		Pattern p = Pattern.compile(pattern);
+		//Matcher matcher = p.matcher(hostgroupName);
 
 		String parentUuid = null;
 		for (int i = 0; i < groups.length; i++) {
-
-			if (groups[i].getName().startsWith("[")) {
+			
+			Matcher matcher = p.matcher(groups[i].getName());
+						
+			// Example item as CI : 
+			// (Невский.СЭ)ТЭЦ-1
+			if (matcher.matches()) {
 				parentUuid = groups[i].getUuid();
 				logger.debug(" *** Found Parent Group name: " + groups[i].getName());
 				logger.debug(" *** Found Parent Group ID: " + groups[i].getId());
@@ -652,8 +676,38 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 	private Device genDeviceObj(NodeGroup nodeGroup) {
 		// TODO Auto-generated method stub
 		Device gendevice = new Device();
+		
+		String pattern = endpoint.getConfiguration().getNodeGroupPattern();
+		logger.debug("*** NNM Node Group Pattern: " + pattern);
+		
+		String newNodegroupName = ""; 
+		String service = "";
+		String nodegroupName = nodeGroup.getName();
+		
+		// Example item as CI : 
+		// (Невский.СЭ)ТЭЦ-1
+		Pattern p = Pattern.compile(pattern);
+		Matcher matcher = p.matcher(nodegroupName);
+		
+		// if NodeGroup has Parent pattern
+		if (matcher.matches()) {
+			logger.debug("*** Finded NNM NodeGroup with Pattern: " + nodegroupName);
+			
+			newNodegroupName = matcher.group(2).toString();
+			service = matcher.group(1).toString();
 
-		gendevice.setName(nodeGroup.getName());
+		    logger.debug("*** newHostgroupName: " + newNodegroupName );
+		    logger.debug("*** service: " + service );
+			
+		}
+		
+		// send null object
+		else {
+			return null;
+		}
+
+		gendevice.setName(newNodegroupName);
+		gendevice.setService(service);
 		gendevice.setDeviceType("NodeGroup");
 		gendevice.setId(nodeGroup.getUuid());
 

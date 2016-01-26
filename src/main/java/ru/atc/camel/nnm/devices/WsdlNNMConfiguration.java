@@ -22,6 +22,8 @@ public class WsdlNNMConfiguration {
 	
 	private String wspassword;
 	
+	private String nodeGroupPattern;
+	
 	private int lastid = 0;
 	
 	private String eventsdump ;
@@ -172,5 +174,13 @@ public class WsdlNNMConfiguration {
 		this.adaptername = adaptername;
 	}
 
+	public String getNodeGroupPattern() {
+		return nodeGroupPattern;
+	}
 
+	public void setNodeGroupPattern(String nodeGroupPattern) {
+		this.nodeGroupPattern = nodeGroupPattern;
+	}
+
+	
 }
