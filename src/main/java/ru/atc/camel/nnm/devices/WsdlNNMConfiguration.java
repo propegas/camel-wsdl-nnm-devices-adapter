@@ -23,6 +23,8 @@ public class WsdlNNMConfiguration {
 	private String wspassword;
 	
 	private String nodeGroupPattern;
+
+	private String nodeGroupSearchPattern;
 	
 	private int lastid = 0;
 	
@@ -180,6 +182,14 @@ public class WsdlNNMConfiguration {
 
 	public void setNodeGroupPattern(String nodeGroupPattern) {
 		this.nodeGroupPattern = nodeGroupPattern;
+	}
+
+	public String getNodeGroupSearchPattern() {
+		return nodeGroupSearchPattern;
+	}
+
+	public void setNodeGroupSearchPattern(String nodeGroupSearchPattern) {
+		this.nodeGroupSearchPattern = nodeGroupSearchPattern;
 	}
 
 	
