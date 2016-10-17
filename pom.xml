@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ru.atc.monitoring</groupId>
 	<artifactId>camel-wsdl-nnm-devices-adapter</artifactId>
-	<version>0.3-SNAPSHOT</version>
+    <version>0.4-SNAPSHOT</version>
 	
 	<properties>
  		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -116,6 +116,14 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.7.12</version>
+        </dependency>
+
+        <dependency>
+            <groupId>NMS</groupId>
+            <artifactId>sdk</artifactId>
+            <version>1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/nms-sdk.jar</systemPath>
         </dependency>
 
     </dependencies>

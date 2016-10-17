@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import ru.atc.adapters.type.Device;
 
 import javax.jms.ConnectionFactory;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,13 +21,17 @@ import java.util.Properties;
 
 import static ru.atc.adapters.message.CamelMessageManager.genHeartbeatMessage;
 
-public class Main {
+public final class Main {
 
     private static final Logger loggerErrors = LoggerFactory.getLogger("errorsLogger");
     private static Logger logger = LoggerFactory.getLogger(Main.class);
     private static String activemqPort;
     private static String activemqIp;
     private static String adaptername;
+
+    private Main() {
+
+    }
 
     public static void main(String[] args) throws Exception {
 
@@ -74,12 +77,8 @@ public class Main {
             properties.setLocation("classpath:wsdlnnm.properties");
             getContext().addComponent("properties", properties);
 
-            ConnectionFactory connectionFactory = new ActiveMQConnectionFactory
-                    ("tcp://" + activemqIp + ":" + activemqPort);
+            ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://" + activemqIp + ":" + activemqPort);
             getContext().addComponent("activemq", JmsComponent.jmsComponentAutoAcknowledge(connectionFactory));
-
-            File cachefile = new File("sendedEvents.dat");
-            logger.info(String.format("Cache file created: %s", cachefile.createNewFile()));
 
             from(new StringBuilder()
                     .append("wsdlnnm://devices?")
@@ -91,7 +90,8 @@ public class Main {
                     .append("source={{source}}&")
                     .append("nodeGroupPattern={{node_group_pattern}}&")
                     .append("nodeGroupSearchPattern={{node_group_search_pattern}}&")
-                    .append("adaptername={{adaptername}}").toString())
+                    .append("adaptername={{adaptername}}")
+                    .toString())
 
                     .choice()
                     .when(header("Type").isEqualTo("Error"))
@@ -106,7 +106,6 @@ public class Main {
                     .to("activemq:{{devicesqueue}}")
                     .log("*** Device: ${id} ${header.DeviceId}");
 
-
             // Heartbeats
             from("timer://foo?period={{heartbeatsdelay}}")
                     .process(new Processor() {
@@ -120,6 +119,5 @@ public class Main {
                     .log("*** Heartbeat: ${id}");
 
         }
-
     }
 }

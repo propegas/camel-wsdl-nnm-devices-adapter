@@ -1,0 +1,36 @@
+<wsdl:definitions xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/'
+                  xmlns:tns='http://notification.sdk.nms.ov.hp.com/nms-sdk-snmp-notify'
+                  xmlns:wsa10='http://www.w3.org/2005/08/addressing' xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/'
+                  xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing' xmlns:xs='http://www.w3.org/2001/XMLSchema'
+                  targetNamespace='http://notification.sdk.nms.ov.hp.com/nms-sdk-snmp-notify'>
+ <wsdl:import location='ws-eventing.wsdl' namespace='http://schemas.xmlsoap.org/ws/2004/08/eventing'></wsdl:import>
+ <wsdl:types>
+  <xs:schema targetNamespace='http://schemas.xmlsoap.org/ws/2004/08/eventing'>
+   <xs:include schemaLocation='ws-eventing.xsd'/>
+  </xs:schema>
+  <xs:schema blockDefault='#all' elementFormDefault='unqualified' targetNamespace='http://notification.sdk.nms.ov.hp.com/nms-sdk-snmp-notify'>
+   <xs:complexType name='snmpNotification'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='nodeIds' nillable='true' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+  </xs:schema>
+ </wsdl:types>
+ <wsdl:message name='SnmpNotificationMsg'>
+  <wsdl:part name='arg0' type='tns:snmpNotification'></wsdl:part>
+ </wsdl:message>
+ <wsdl:portType name='SnmpNotificationSource' wse:EventSource='true'>
+  <wsdl:operation name='SnmpNotificationMsg'>
+   <wsdl:output message='tns:SnmpNotificationMsg'></wsdl:output>
+  </wsdl:operation>
+ </wsdl:portType>
+ <wsdl:binding name='SnmpNotificationSourceBinding' type='tns:SnmpNotificationSource'>
+  <soap:binding style='rpc' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <wsdl:operation name='SnmpNotificationMsg'>
+   <soap:operation soapAction=''/>
+   <wsdl:output>
+    <soap:body use='literal'/>
+   </wsdl:output>
+  </wsdl:operation>
+ </wsdl:binding>
+</wsdl:definitions>

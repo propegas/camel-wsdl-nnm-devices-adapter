@@ -1,0 +1,139 @@
+<xs:schema xmlns:tns='http://schemas.xmlsoap.org/ws/2004/08/eventing' xmlns:wsa='http://www.w3.org/2005/08/addressing'
+           xmlns:xs='http://www.w3.org/2001/XMLSchema' blockDefault='#all' elementFormDefault='qualified'
+           targetNamespace='http://schemas.xmlsoap.org/ws/2004/08/eventing'>
+ <xs:import namespace='http://www.w3.org/XML/1998/namespace' schemaLocation='http://www.w3.org/2001/xml.xsd'/>
+ <xs:import namespace='http://www.w3.org/2005/08/addressing' schemaLocation='ws-addr.xsd'/>
+ <!-- Types and global elements -->
+ <xs:complexType mixed='true' name='DeliveryType'>
+  <xs:sequence>
+   <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##any' processContents='lax'/>
+  </xs:sequence>
+  <xs:attribute name='Mode' type='xs:anyURI' use='optional'/>
+  <xs:anyAttribute namespace='##other' processContents='lax'/>
+ </xs:complexType>
+ <xs:element name='NotifyTo' type='wsa:EndpointReferenceType'/>
+ <xs:simpleType name='NonNegativeDurationType'>
+  <xs:restriction base='xs:duration'>
+   <xs:minInclusive value='P0Y0M0DT0H0M0S'/>
+  </xs:restriction>
+ </xs:simpleType>
+ <xs:simpleType name='ExpirationType'>
+  <xs:union memberTypes='xs:dateTime tns:NonNegativeDurationType'/>
+ </xs:simpleType>
+ <xs:complexType mixed='true' name='FilterType'>
+  <xs:sequence>
+   <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+  </xs:sequence>
+  <xs:attribute name='Dialect' type='xs:anyURI' use='optional'/>
+  <xs:anyAttribute namespace='##other' processContents='lax'/>
+ </xs:complexType>
+ <xs:complexType name='LanguageSpecificStringType'>
+  <xs:simpleContent>
+   <xs:extension base='xs:string'>
+    <xs:attribute ref='xml:lang'/>
+    <xs:anyAttribute namespace='##other' processContents='lax'/>
+   </xs:extension>
+  </xs:simpleContent>
+ </xs:complexType>
+ <!-- Subscribe request -->
+ <xs:element name='Subscribe'>
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element minOccurs='0' name='EndTo' type='wsa:EndpointReferenceType'/>
+    <xs:element name='Delivery' type='tns:DeliveryType'/>
+    <xs:element minOccurs='0' name='Expires' type='tns:ExpirationType'/>
+    <xs:element minOccurs='0' name='Filter' type='tns:FilterType'/>
+    <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+   </xs:sequence>
+   <xs:anyAttribute namespace='##other' processContents='lax'/>
+  </xs:complexType>
+ </xs:element>
+ <xs:element name='Identifier' type='xs:anyURI'/>
+ <!-- Subscribe response -->
+ <xs:element name='SubscribeResponse'>
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element name='SubscriptionManager' type='wsa:EndpointReferenceType'/>
+    <xs:element name='Expires' type='tns:ExpirationType'/>
+    <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+   </xs:sequence>
+   <xs:anyAttribute namespace='##other' processContents='lax'/>
+  </xs:complexType>
+ </xs:element>
+ <!-- Used in a fault if there's an unsupported dialect -->
+ <xs:element name='SupportedDialect' type='xs:anyURI'/>
+ <!-- Used in a fault if there's an unsupported delivery mode -->
+ <xs:element name='SupportedDeliveryMode' type='xs:anyURI'/>
+ <!-- Renew request -->
+ <xs:element name='Renew'>
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element minOccurs='0' name='Expires' type='tns:ExpirationType'/>
+    <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+   </xs:sequence>
+   <xs:anyAttribute namespace='##other' processContents='lax'/>
+  </xs:complexType>
+ </xs:element>
+ <!-- Renew response -->
+ <xs:element name='RenewResponse'>
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element minOccurs='0' name='Expires' type='tns:ExpirationType'/>
+    <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+   </xs:sequence>
+   <xs:anyAttribute namespace='##other' processContents='lax'/>
+  </xs:complexType>
+ </xs:element>
+ <!-- GetStatus request -->
+ <xs:element name='GetStatus'>
+  <xs:complexType>
+   <xs:sequence>
+    <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+   </xs:sequence>
+   <xs:anyAttribute namespace='##other' processContents='lax'/>
+  </xs:complexType>
+ </xs:element>
+ <!-- GetStatus response -->
+ <xs:element name='GetStatusResponse'>
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element minOccurs='0' name='Expires' type='tns:ExpirationType'/>
+    <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+   </xs:sequence>
+   <xs:anyAttribute namespace='##other' processContents='lax'/>
+  </xs:complexType>
+ </xs:element>
+ <!-- Unsubscribe request -->
+ <xs:element name='Unsubscribe'>
+  <xs:complexType>
+   <xs:sequence>
+    <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+   </xs:sequence>
+   <xs:anyAttribute namespace='##other' processContents='lax'/>
+  </xs:complexType>
+ </xs:element>
+ <!-- count(/s:Envelope/s:Body/*) = 0 for Unsubscribe response -->
+ <!-- SubscriptionEnd message -->
+ <xs:element name='SubscriptionEnd'>
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element name='SubscriptionManager' type='wsa:EndpointReferenceType'/>
+    <xs:element name='Code' type='tns:OpenSubscriptionEndCodeType'/>
+    <xs:element maxOccurs='unbounded' minOccurs='0' name='Reason' type='tns:LanguageSpecificStringType'/>
+    <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+   </xs:sequence>
+   <xs:anyAttribute namespace='##other' processContents='lax'/>
+  </xs:complexType>
+ </xs:element>
+ <xs:simpleType name='SubscriptionEndCodeType'>
+  <xs:restriction base='xs:QName'>
+   <xs:enumeration value='tns:DeliveryFailure'/>
+   <xs:enumeration value='tns:SourceShuttingDown'/>
+   <xs:enumeration value='tns:SourceCancelling'/>
+  </xs:restriction>
+ </xs:simpleType>
+ <xs:simpleType name='OpenSubscriptionEndCodeType'>
+  <xs:union memberTypes='tns:SubscriptionEndCodeType xs:QName'/>
+ </xs:simpleType>
+ <xs:attribute name='EventSource' type='xs:boolean'/>
+</xs:schema>

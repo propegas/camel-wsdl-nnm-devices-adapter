@@ -1,0 +1,41 @@
+<wsdl:definitions xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/'
+                  xmlns:tns='http://notification.sdk.nms.ov.hp.com/nms-sdk-node-tenant-change-notify'
+                  xmlns:wsa10='http://www.w3.org/2005/08/addressing' xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/'
+                  xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing' xmlns:xs='http://www.w3.org/2001/XMLSchema'
+                  targetNamespace='http://notification.sdk.nms.ov.hp.com/nms-sdk-node-tenant-change-notify'>
+ <wsdl:import location='ws-eventing.wsdl' namespace='http://schemas.xmlsoap.org/ws/2004/08/eventing'></wsdl:import>
+ <wsdl:types>
+  <xs:schema targetNamespace='http://schemas.xmlsoap.org/ws/2004/08/eventing'>
+   <xs:include schemaLocation='ws-eventing.xsd'/>
+  </xs:schema>
+  <xs:schema blockDefault='#all' elementFormDefault='unqualified' targetNamespace='http://notification.sdk.nms.ov.hp.com/nms-sdk-node-tenant-change-notify'>
+   <xs:complexType name='nodeTenantChangeNotification'>
+    <xs:sequence>
+     <xs:element name='nodeUuid' type='xs:string'/>
+     <xs:element name='currentTenantName' type='xs:string'/>
+     <xs:element name='currentTenantUuid' type='xs:string'/>
+     <xs:element name='previousTenantName' type='xs:string'/>
+     <xs:element name='previousTenantUuid' type='xs:string'/>
+     <xs:element name='occurrenceTime' type='xs:dateTime'/>
+    </xs:sequence>
+   </xs:complexType>
+  </xs:schema>
+ </wsdl:types>
+ <wsdl:message name='NodeTenantChangeNotificationMsg'>
+  <wsdl:part name='arg0' type='tns:nodeTenantChangeNotification'></wsdl:part>
+ </wsdl:message>
+ <wsdl:portType name='NodeTenantChangeNotificationSource' wse:EventSource='true'>
+  <wsdl:operation name='NodeTenantChangeNotification'>
+   <wsdl:output message='tns:NodeTenantChangeNotificationMsg'></wsdl:output>
+  </wsdl:operation>
+ </wsdl:portType>
+ <wsdl:binding name='NodeTenantChangeNotificationSourceBinding' type='tns:NodeTenantChangeNotificationSource'>
+  <soap:binding style='rpc' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <wsdl:operation name='NodeTenantChangeNotification'>
+   <soap:operation soapAction=''/>
+   <wsdl:output>
+    <soap:body use='literal'/>
+   </wsdl:output>
+  </wsdl:operation>
+ </wsdl:binding>
+</wsdl:definitions>

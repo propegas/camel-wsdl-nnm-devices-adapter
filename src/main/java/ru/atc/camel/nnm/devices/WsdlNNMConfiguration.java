@@ -1,196 +1,188 @@
 package ru.atc.camel.nnm.devices;
 
-import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
 
 @UriParams
-public class WsdlNNMConfiguration {	
-    
-	private String eventsuri;
-	
-	private String source;
-	
-	private String adaptername;
-	
-	private String wsusername;
-	
-	private String wsdlapiurl;
-	
-	private int wsdlapiport;
-	
-	private long lasttimestamp;
-	
-	private String wspassword;
-	
-	private String nodeGroupPattern;
+public class WsdlNNMConfiguration {
 
-	private String nodeGroupSearchPattern;
-	
-	private int lastid = 0;
-	
-	private String eventsdump ;
-	
-    @UriParam
+    private String eventsuri;
+
+    private String source;
+
+    private String adaptername;
+
+    private String wsusername;
+
+    private String wsdlapiurl;
+
+    private int wsdlapiport;
+
+    private long lasttimestamp;
+
+    private String wspassword;
+
+    private String nodeGroupPattern;
+
+    private String nodeGroupSearchPattern;
+
+    private int lastid;
+
+    private String eventsdump;
+
     private String query;
-    
-    @UriParam(defaultValue = "60000")
-    private int delay = 60000;
-    
-    @UriParam(defaultValue = "0")
-    private int startindex = 0;
-    
-    @UriParam(defaultValue = "50")
-    private int initcount = 50;
-    
-    @UriParam(defaultValue = "50")
-    private int count = 50;
-    
-    @UriParam(defaultValue = "true")
-    private String specialEvent = "true";
 
-	public int getDelay() {
-		return delay;
-	}
+    private int delay;
 
-	public void setDelay(int delay) {
-		this.delay = delay;
-	}
+    private int startindex;
 
-	public String getQuery() {
-		return query;
-	}
+    private int initcount;
 
-	public void setQuery(String query) {
-		this.query = query;
-	}
+    private int count;
 
-	public int getStartindex() {
-		return startindex;
-	}
+    private String specialEvent;
 
-	public void setStartindex(int startindex) {
-		this.startindex = startindex;
-	}
+    public int getDelay() {
+        return delay;
+    }
 
-	public int getCount() {
-		return count;
-	}
+    public void setDelay(int delay) {
+        this.delay = delay;
+    }
 
-	public void setCount(int count) {
-		this.count = count;
-	}
+    public String getQuery() {
+        return query;
+    }
 
-	public String getSpecialEvent() {
-		return specialEvent;
-	}
+    public void setQuery(String query) {
+        this.query = query;
+    }
 
-	public void setSpecialEvent(String specialEvent) {
-		this.specialEvent = specialEvent;
-	}
+    public int getStartindex() {
+        return startindex;
+    }
 
-	public String getEventsuri() {
-		return eventsuri;
-	}
+    public void setStartindex(int startindex) {
+        this.startindex = startindex;
+    }
 
-	public void setEventsuri(String eventsuri) {
-		this.eventsuri = eventsuri;
-	}
+    public int getCount() {
+        return count;
+    }
 
-	public int getLastid() {
-		return lastid;
-	}
+    public void setCount(int count) {
+        this.count = count;
+    }
 
-	public void setLastid(int lastid) {
-		this.lastid = lastid;
-	}
+    public String getSpecialEvent() {
+        return specialEvent;
+    }
 
-	public String getWsdlapiurl() {
-		return wsdlapiurl;
-	}
+    public void setSpecialEvent(String specialEvent) {
+        this.specialEvent = specialEvent;
+    }
 
-	public void setWsdlapiurl(String wsdlapiurl) {
-		this.wsdlapiurl = wsdlapiurl;
-	}
+    public String getEventsuri() {
+        return eventsuri;
+    }
 
-	public String getWsusername() {
-		return wsusername;
-	}
+    public void setEventsuri(String eventsuri) {
+        this.eventsuri = eventsuri;
+    }
 
-	public void setWsusername(String wsusername) {
-		this.wsusername = wsusername;
-	}
+    public int getLastid() {
+        return lastid;
+    }
 
-	public String getWspassword() {
-		return wspassword;
-	}
+    public void setLastid(int lastid) {
+        this.lastid = lastid;
+    }
 
-	public void setWspassword(String wspassword) {
-		this.wspassword = wspassword;
-	}
+    public String getWsdlapiurl() {
+        return wsdlapiurl;
+    }
 
-	public int getInitcount() {
-		return initcount;
-	}
+    public void setWsdlapiurl(String wsdlapiurl) {
+        this.wsdlapiurl = wsdlapiurl;
+    }
 
-	public void setInitcount(int initcount) {
-		this.initcount = initcount;
-	}
+    public String getWsusername() {
+        return wsusername;
+    }
 
-	public int getWsdlapiport() {
-		return wsdlapiport;
-	}
+    public void setWsusername(String wsusername) {
+        this.wsusername = wsusername;
+    }
 
-	public void setWsdlapiport(int wsdlapiport) {
-		this.wsdlapiport = wsdlapiport;
-	}
+    public String getWspassword() {
+        return wspassword;
+    }
 
-	public long getLasttimestamp() {
-		return lasttimestamp;
-	}
+    public void setWspassword(String wspassword) {
+        this.wspassword = wspassword;
+    }
 
-	public void setLasttimestamp(long lasttimestamp) {
-		this.lasttimestamp = lasttimestamp;
-	}
+    public int getInitcount() {
+        return initcount;
+    }
 
-	public String getEventsdump() {
-		return eventsdump;
-	}
+    public void setInitcount(int initcount) {
+        this.initcount = initcount;
+    }
 
-	public void setEventsdump(String eventsdump) {
-		this.eventsdump = eventsdump;
-	}
+    public int getWsdlapiport() {
+        return wsdlapiport;
+    }
 
-	public String getSource() {
-		return source;
-	}
+    public void setWsdlapiport(int wsdlapiport) {
+        this.wsdlapiport = wsdlapiport;
+    }
 
-	public void setSource(String source) {
-		this.source = source;
-	}
+    public long getLasttimestamp() {
+        return lasttimestamp;
+    }
 
-	public String getAdaptername() {
-		return adaptername;
-	}
+    public void setLasttimestamp(long lasttimestamp) {
+        this.lasttimestamp = lasttimestamp;
+    }
 
-	public void setAdaptername(String adaptername) {
-		this.adaptername = adaptername;
-	}
+    public String getEventsdump() {
+        return eventsdump;
+    }
 
-	public String getNodeGroupPattern() {
-		return nodeGroupPattern;
-	}
+    public void setEventsdump(String eventsdump) {
+        this.eventsdump = eventsdump;
+    }
 
-	public void setNodeGroupPattern(String nodeGroupPattern) {
-		this.nodeGroupPattern = nodeGroupPattern;
-	}
+    public String getSource() {
+        return source;
+    }
 
-	public String getNodeGroupSearchPattern() {
-		return nodeGroupSearchPattern;
-	}
+    public void setSource(String source) {
+        this.source = source;
+    }
 
-	public void setNodeGroupSearchPattern(String nodeGroupSearchPattern) {
-		this.nodeGroupSearchPattern = nodeGroupSearchPattern;
-	}
+    public String getAdaptername() {
+        return adaptername;
+    }
 
-	
+    public void setAdaptername(String adaptername) {
+        this.adaptername = adaptername;
+    }
+
+    public String getNodeGroupPattern() {
+        return nodeGroupPattern;
+    }
+
+    public void setNodeGroupPattern(String nodeGroupPattern) {
+        this.nodeGroupPattern = nodeGroupPattern;
+    }
+
+    public String getNodeGroupSearchPattern() {
+        return nodeGroupSearchPattern;
+    }
+
+    public void setNodeGroupSearchPattern(String nodeGroupSearchPattern) {
+        this.nodeGroupSearchPattern = nodeGroupSearchPattern;
+    }
+
 }
