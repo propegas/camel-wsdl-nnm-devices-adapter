@@ -68,7 +68,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
         return timeout;
     }
 
-    private int processSearchDevices() throws Exception {
+    private int processSearchDevices() {
         try {
 
             String host = endpoint.getConfiguration().getWsdlapiurl();
@@ -109,8 +109,8 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
                     try {
                         createExchangeDevice(gendevice);
                     } catch (Exception e) {
-                        loggerErrors.error(String.format("Error while send Exchange message: %s ", e));
-                        logger.error(String.format("Error while send Exchange message: %s ", e));
+                        loggerErrors.error(String.format("Error while send Exchange message ", e));
+                        logger.error(String.format("Error while send Exchange message ", e));
                         genErrorMessage(e.getMessage());
                     }
                 }
@@ -137,7 +137,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
                 } catch (Exception e) {
                     loggerErrors.error(String.format("Error while send Exchange message: %s ", e));
                     logger.error(String.format("Error while send Exchange message: %s ", e));
-                    genErrorMessage(e.getMessage());
+                    genErrorMessage("Error while send Exchange message: %s ", e);
                 }
 
             }
@@ -145,9 +145,9 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
             logger.info(String.format(" **** received %d Groups", allgroups.length));
 
         } catch (Exception e) { // send error message to the same queue
-            loggerErrors.error(String.format("Error while get Nodes from NNM: %s ", e));
-            logger.error(String.format("Error while get Nodes from NNM: %s ", e));
-            genErrorMessage(e.getMessage());
+            loggerErrors.error(String.format("Error while get Nodes from NNM ", e));
+            logger.error(String.format("Error while get Nodes from NNM ", e));
+            genErrorMessage("Error while get Nodes from NNM ", e);
             return 0;
         }
 
@@ -173,7 +173,15 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
         existFilter.setOperator(BooleanOperator.AND);
         existFilter.setSubFilters(subFilters);
 
-        NmsNodeGroup nmsgroup = sampleClient.getNodeGroupService();
+        NmsNodeGroup nmsgroup;
+        try {
+            logger.info(" **** Try to connect to Web-Service ");
+            nmsgroup = sampleClient.getNodeGroupService();
+        } catch (Exception e) {
+            loggerErrors.error(" **** Error while connecting to Web-Service ", e);
+            logger.error(" **** Error while connecting to Web-Service ", e);
+            throw new RuntimeException(String.format("Error while connecting to Web-Service ", e));
+        }
 
         NodeGroup[] groups;
         try {
@@ -242,7 +250,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
                 endpoint.getConfiguration().getAdaptername());
     }
 
-    private NodeGroup[] getGroupsByNode(SampleClient sampleClient, String id) throws Exception {
+    private NodeGroup[] getGroupsByNode(SampleClient sampleClient, String id) {
 
         NmsNodeGroup nmsgroup;
         nmsgroup = sampleClient.getNodeGroupService();
@@ -264,7 +272,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
         return groups;
     }
 
-    private Node[] getAllDevices(SampleClient sampleClient) throws Exception {
+    private Node[] getAllDevices(SampleClient sampleClient) {
 
         Constraint cons = new Constraint();
         cons.setName("includeCias");
@@ -281,8 +289,14 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
 
         NmsNode nmsnode;
 
-        nmsnode = sampleClient.getNodeService();
-
+        try {
+            logger.info(" **** Try to connect to Web-Service ");
+            nmsnode = sampleClient.getNodeService();
+        } catch (Exception e) {
+            loggerErrors.error(" **** Error while connecting to Web-Service ", e);
+            logger.error(" **** Error while connecting to Web-Service ", e);
+            throw new RuntimeException(String.format("Error while connecting to Web-Service ", e));
+        }
         Node[] nodes;
 
         try {
