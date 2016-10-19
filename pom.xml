@@ -122,8 +122,6 @@
             <groupId>NMS</groupId>
             <artifactId>sdk</artifactId>
             <version>1</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/nms-sdk.jar</systemPath>
         </dependency>
 
     </dependencies>
@@ -235,6 +233,11 @@
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.6</version>
 				<configuration>
+                    <excludes>
+                        <exclude>*.properties</exclude>
+                        <exclude>*.properties*</exclude>
+                        <exclude>*.xml</exclude>
+                    </excludes>
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
