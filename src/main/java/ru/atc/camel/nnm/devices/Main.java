@@ -23,8 +23,8 @@ import static ru.atc.adapters.message.CamelMessageManager.genHeartbeatMessage;
 
 public final class Main {
 
+    private static final Logger logger = LoggerFactory.getLogger("mainLogger");
     private static final Logger loggerErrors = LoggerFactory.getLogger("errorsLogger");
-    private static Logger logger = LoggerFactory.getLogger(Main.class);
     private static String activemqPort;
     private static String activemqIp;
     private static String adaptername;

@@ -314,7 +314,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
     }
 
     private Device genDeviceObj(Node node, String parentGroupUuid) {
-        Device genDevice = new Device();
+        Device genDevice = new Device(endpoint.getConfiguration().getAdaptername());
 
         String hostName;
         hostName = node.getName();
@@ -366,7 +366,7 @@ public class WsdlNNMConsumer extends ScheduledPollConsumer {
     }
 
     private Device genDeviceObj(NodeGroup nodeGroup) {
-        Device gendevice = new Device();
+        Device gendevice = new Device(endpoint.getConfiguration().getAdaptername());
 
         String pattern = endpoint.getConfiguration().getNodeGroupPattern();
         logger.debug("*** NNM Node Group Pattern: " + pattern);
